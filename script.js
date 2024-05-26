@@ -8,6 +8,7 @@ let mediaRecorder;
 let recordedChunks = [];
 let timerInterval;
 let startTime;
+const RECORDING_TIME = 20;  // Set recording time to 20 seconds
 
 // Function to start the video capture
 async function startCapture() {
@@ -55,10 +56,10 @@ function startRecording() {
 
     startTime = Date.now();
     updateTimer();
-    timerInterval = setInterval(updateTimer, 2000);
+    timerInterval = setInterval(updateTimer, 1000);
 
     // Automatically stop recording after 20 seconds
-    setTimeout(stopRecording, 20000);
+    setTimeout(stopRecording, RECORDING_TIME * 1000);
 }
 
 // Function to stop recording
@@ -74,7 +75,7 @@ function stopRecording() {
 // Function to update the timer
 function updateTimer() {
     const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    const remainingTime = 10 - elapsedTime;
+    const remainingTime = RECORDING_TIME - elapsedTime;
     const minutes = String(Math.floor(remainingTime / 60)).padStart(2, '0');
     const seconds = String(remainingTime % 60).padStart(2, '0');
     timerElement.textContent = `${minutes}:${seconds}`;
@@ -87,5 +88,4 @@ function updateTimer() {
 // Start capture immediately on page load
 startCapture();
 
-recordButton.addEventListener('click', startRecording);
-stopButton.addEventListener('click', stopRecording);
+recordBut
