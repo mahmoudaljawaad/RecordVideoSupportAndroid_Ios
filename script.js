@@ -74,7 +74,8 @@ function stopRecording() {
 // Function to update the timer
 function updateTimer() {
     const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    const remainingTime = 10 - elapsedTime;
+        const remainingTime = 20 - elapsedTime;
+
     const minutes = String(Math.floor(remainingTime / 60)).padStart(2, '0');
     const seconds = String(remainingTime % 60).padStart(2, '0');
     timerElement.textContent = `${minutes}:${seconds}`;
