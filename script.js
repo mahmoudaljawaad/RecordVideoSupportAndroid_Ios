@@ -1,18 +1,24 @@
 const video = document.getElementById('video');
 const startButton = document.getElementById('startButton');
+const recordButton = document.getElementById('recordButton');
+const stopButton = document.getElementById('stopButton');
+const recordedVideo = document.getElementById('recordedVideo');
+
+let mediaRecorder;
+let recordedChunks = [];
 
 // Function to start the video capture
 async function startCapture() {
-    // Check if getUserMedia is supported
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
-            // Request access to the user's camera
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            
-            // Set the video element's source to the stream
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: { exact: "environment" } }
+            });
             video.srcObject = stream;
+            recordButton.disabled = false;
         } catch (err) {
             console.error('Error accessing the camera: ', err);
+            alert('Error accessing the camera: ' + err.message);
         }
     } else {
         console.error('getUserMedia is not supported in your browser');
@@ -20,5 +26,38 @@ async function startCapture() {
     }
 }
 
-// Add event listener to the start button
+// Function to start recording
+function startRecording() {
+    recordedChunks = [];
+    const options = { mimeType: 'video/webm; codecs=vp9' };
+    const stream = video.srcObject;
+    mediaRecorder = new MediaRecorder(stream, options);
+
+    mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+        }
+    };
+
+    mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        recordedVideo.src = url;
+        recordedVideo.controls = true;
+    };
+
+    mediaRecorder.start();
+    recordButton.disabled = true;
+    stopButton.disabled = false;
+}
+
+// Function to stop recording
+function stopRecording() {
+    mediaRecorder.stop();
+    recordButton.disabled = false;
+    stopButton.disabled = true;
+}
+
 startButton.addEventListener('click', startCapture);
+recordButton.addEventListener('click', startRecording);
+stopButton.addEventListener('click', stopRecording);
