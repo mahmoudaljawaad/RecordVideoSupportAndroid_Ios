@@ -33,7 +33,7 @@ function startRecording() {
     // Create a new MediaRecorder instance
     mediaRecorder = new RecordRTC.MediaStreamRecorder(mediaStream, {
         type: 'video',
-        mimeType: 'video/webm;codecs=vp9'
+        mimeType: 'video/webm;codecs=vp9' // Specify VP9 codec
     });
 
     // Start recording
