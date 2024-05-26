@@ -1,105 +1,93 @@
-const video = document.getElementById("video");
-const recordButton = document.getElementById("recordButton");
-const stopButton = document.getElementById("stopButton");
-const recordedVideo = document.getElementById("recordedVideo");
-const timerElement = document.getElementById("timer");
+// Selecting elements
+const videoElement = document.getElementById('video');
+const recordButton = document.getElementById('recordButton');
+const stopButton = document.getElementById('stopButton');
+const recordedVideoElement = document.getElementById('recordedVideo');
+const timerElement = document.getElementById('timer');
 
+// MediaStream and MediaRecorder variables
+let mediaStream;
 let mediaRecorder;
 let recordedChunks = [];
 let timerInterval;
-let startTime;
-const RECORDING_TIME = 20; // Set recording time to 20 seconds
-try {
-  // Function to start the video capture
-  async function startCapture() {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: "environment" } },
+let remainingTime = 20; // Initial timer value in seconds
+
+// Function to start video capture
+async function startCapture() {
+    try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' } // Use back camera
         });
-        video.srcObject = stream;
-        recordButton.disabled = false;
-      } catch (err) {
-        console.error("Error accessing the camera: ", err);
-        alert("Error accessing the camera: " + err.message);
-      }
-    } else {
-      console.error("getUserMedia is not supported in your browser");
-      alert("getUserMedia is not supported in your browser");
+        videoElement.srcObject = mediaStream;
+    } catch (error) {
+        console.error('Error accessing the camera:', error);
+        alert('Error accessing the camera: ' + error.message);
     }
-  }
+}
 
-  // Function to check if MediaRecorder is supported
-  function isMediaRecorderSupported() {
-    return typeof MediaRecorder !== "undefined";
-  }
-
-  // Function to start recording
-  function startRecording() {
-    if (!isMediaRecorderSupported()) {
-        alert("MediaRecorder is not supported in this browser.");
-      return;
-    }
-
-    recordedChunks = [];
-    const options = { mimeType: "video/webm; codecs=vp9" };
-    const stream = video.srcObject;
-    mediaRecorder = new MediaRecorder(stream, options);
-
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        recordedChunks.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(recordedChunks, { type: "video/webm" });
-      const url = URL.createObjectURL(blob);
-      recordedVideo.src = url;
-      recordedVideo.controls = true;
-      clearInterval(timerInterval);
-    };
-
-    mediaRecorder.start();
+// Function to start video recording
+function startRecording() {
     recordButton.disabled = true;
     stopButton.disabled = false;
 
-    startTime = Date.now();
-    updateTimer();
-    timerInterval = setInterval(updateTimer, 1000);
+    // Create a new MediaRecorder instance
+    mediaRecorder = new RecordRTC.MediaStreamRecorder(mediaStream, {
+        type: 'video',
+        mimeType: 'video/webm;codecs=vp9'
+    });
 
-    // Automatically stop recording after 20 seconds
-    setTimeout(stopRecording, RECORDING_TIME * 1000);
-  }
+    // Start recording
+    mediaRecorder.startRecording();
 
-  // Function to stop recording
-  function stopRecording() {
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-      mediaRecorder.stop();
-    }
+    // Start timer
+    startTimer();
+
+    // Event listener for data available
+    mediaRecorder.ondataavailable = function(event) {
+        recordedChunks.push(event.data);
+    };
+}
+
+// Function to stop video recording
+function stopRecording() {
     recordButton.disabled = false;
     stopButton.disabled = true;
-    clearInterval(timerInterval);
-  }
 
-  // Function to update the timer
-  function updateTimer() {
-    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    const remainingTime = RECORDING_TIME - elapsedTime;
-    const minutes = String(Math.floor(remainingTime / 60)).padStart(2, "0");
-    const seconds = String(remainingTime % 60).padStart(2, "0");
-    timerElement.textContent = `${minutes}:${seconds}`;
+    // Stop recording
+    mediaRecorder.stopRecording(function() {
+        // Get the recorded blob
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        
+        // Set recorded video source
+        recordedVideoElement.src = URL.createObjectURL(blob);
+        
+        // Release resources
+        recordedChunks = [];
+        mediaRecorder = null;
+
+        // Stop timer
+        clearInterval(timerInterval);
+        timerElement.textContent = '00:20'; // Reset timer display
+    });
+}
+
+// Function to start timer
+function startTimer() {
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+// Function to update timer
+function updateTimer() {
+    remainingTime--;
 
     if (remainingTime <= 0) {
-      clearInterval(timerInterval);
+        stopRecording(); // Stop recording when timer reaches 0
+    } else {
+        const minutes = Math.floor(remainingTime / 60).toString().padStart(2, '0');
+        const seconds = (remainingTime % 60).toString().padStart(2, '0');
+        timerElement.textContent = `${minutes}:${seconds}`;
     }
-  }
-
-  // Start capture immediately on page load
-  startCapture();
-
-  recordButton.addEventListener("click", startRecording);
-  stopButton.addEventListener("click", stopRecording);
-} catch (error) {
-  alert(error);
 }
+
+// Start video capture immediately on page load
+startCapture();
