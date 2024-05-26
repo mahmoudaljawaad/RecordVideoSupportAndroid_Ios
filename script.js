@@ -2,9 +2,12 @@ const video = document.getElementById('video');
 const recordButton = document.getElementById('recordButton');
 const stopButton = document.getElementById('stopButton');
 const recordedVideo = document.getElementById('recordedVideo');
+const timerElement = document.getElementById('timer');
 
 let mediaRecorder;
 let recordedChunks = [];
+let timerInterval;
+let startTime;
 
 // Function to start the video capture
 async function startCapture() {
@@ -43,11 +46,16 @@ function startRecording() {
         const url = URL.createObjectURL(blob);
         recordedVideo.src = url;
         recordedVideo.controls = true;
+        clearInterval(timerInterval);
     };
 
     mediaRecorder.start();
     recordButton.disabled = true;
-    stopButton.disabled = true;
+    stopButton.disabled = false;
+
+    startTime = Date.now();
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
 
     // Automatically stop recording after 10 seconds
     setTimeout(stopRecording, 10000);
@@ -60,6 +68,20 @@ function stopRecording() {
     }
     recordButton.disabled = false;
     stopButton.disabled = true;
+    clearInterval(timerInterval);
+}
+
+// Function to update the timer
+function updateTimer() {
+    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+    const remainingTime = 10 - elapsedTime;
+    const minutes = String(Math.floor(remainingTime / 60)).padStart(2, '0');
+    const seconds = String(remainingTime % 60).padStart(2, '0');
+    timerElement.textContent = `${minutes}:${seconds}`;
+
+    if (remainingTime <= 0) {
+        clearInterval(timerInterval);
+    }
 }
 
 // Start capture immediately on page load
