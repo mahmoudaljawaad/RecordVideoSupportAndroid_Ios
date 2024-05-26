@@ -55,7 +55,7 @@ function startRecording() {
 
     startTime = Date.now();
     updateTimer();
-    timerInterval = setInterval(updateTimer, 1000);
+    timerInterval = setInterval(updateTimer, 2000);
 
     // Automatically stop recording after 20 seconds
     setTimeout(stopRecording, 20000);
