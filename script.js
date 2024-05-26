@@ -57,7 +57,7 @@ function startRecording() {
     updateTimer();
     timerInterval = setInterval(updateTimer, 1000);
 
-    // Automatically stop recording after 10 seconds
+    // Automatically stop recording after 20 seconds
     setTimeout(stopRecording, 20000);
 }
 
