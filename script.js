@@ -1,5 +1,4 @@
 const video = document.getElementById('video');
-const startButton = document.getElementById('startButton');
 const recordButton = document.getElementById('recordButton');
 const stopButton = document.getElementById('stopButton');
 const recordedVideo = document.getElementById('recordedVideo');
@@ -48,16 +47,23 @@ function startRecording() {
 
     mediaRecorder.start();
     recordButton.disabled = true;
-    stopButton.disabled = false;
+    stopButton.disabled = true;
+
+    // Automatically stop recording after 10 seconds
+    setTimeout(stopRecording, 10000);
 }
 
 // Function to stop recording
 function stopRecording() {
-    mediaRecorder.stop();
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+    }
     recordButton.disabled = false;
     stopButton.disabled = true;
 }
 
-startButton.addEventListener('click', startCapture);
+// Start capture immediately on page load
+startCapture();
+
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
