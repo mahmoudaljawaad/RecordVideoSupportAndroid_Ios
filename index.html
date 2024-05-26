@@ -3,38 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Back Camera Capture</title>
+    <title>Mobile Back Camera Capture and Record</title>
 </head>
 <body>
-    <h1>Capture Video from Mobile Back Camera</h1>
+    <h1>Capture and Record Video from Mobile Back Camera</h1>
     <video id="video" width="320" height="240" autoplay></video>
-    <button id="startButton">Start Capture</button>
-    <script>
-        const video = document.getElementById('video');
-        const startButton = document.getElementById('startButton');
-
-        async function startCapture() {
-            // Check if getUserMedia is supported
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                try {
-                    // Request access to the user's back camera
-                    const stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: { exact: "environment" } } 
-                    });
-
-                    // Set the video element's source to the stream
-                    video.srcObject = stream;
-                } catch (err) {
-                    console.error('Error accessing the camera: ', err);
-                    alert('Error accessing the camera: ' + err.message);
-                }
-            } else {
-                console.error('getUserMedia is not supported in your browser');
-                alert('getUserMedia is not supported in your browser');
-            }
-        }
-
-        startButton.addEventListener('click', startCapture);
-    </script>
+    <div>
+        <button id="startButton">Start Capture</button>
+        <button id="recordButton" disabled>Start Recording</button>
+        <button id="stopButton" disabled>Stop Recording</button>
+    </div>
+    <h2>Recorded Video</h2>
+    <video id="recordedVideo" width="320" height="240" controls></video>
+    <script src="/script.js"></script>
 </body>
 </html>
