@@ -3,32 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Back Camera Capture and Record</title>
-    <!-- Include RecordRTC.js library -->
-    <script src="https://cdn.webrtc-experiment.com/RecordRTC/RecordRTC.js"></script>
-    <style>
-        #video {
-            width: 100%;
-        }
-        #recordButton, #stopButton {
-            margin-top: 10px;
-        }
-        #timer {
-            font-size: 24px;
-            margin-top: 10px;
-        }
-    </style>
+    <title>Screen Recording</title>
 </head>
 <body>
-    <h1>Capture and Record Video from Mobile Back Camera</h1>
-    <video id="video" autoplay></video>
-    <div>
-        <button id="recordButton" onclick="startRecording()">Start Recording</button>
-        <button id="stopButton" onclick="stopRecording()" disabled>Stop Recording</button>
-    </div>
-    <div id="timer">00:20</div>
-    <h2>Recorded Video</h2>
+    <h1>Screen Recording Example</h1>
+    <button id="startBtn">Start Recording</button>
+    <button id="stopBtn" disabled>Stop Recording</button>
+    <video id="screenVideo" autoplay muted></video>
+    <h2>Recorded Video Preview</h2>
     <video id="recordedVideo" controls></video>
-    <script src="script.js"></script>
+
+    <script src="screenRecording.js"></script>
 </body>
 </html>
