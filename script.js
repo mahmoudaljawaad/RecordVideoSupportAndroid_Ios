@@ -7,7 +7,7 @@ const timerDisplay = document.getElementById('timer');
 let mediaRecorder;
 let recordedChunks = [];
 let timer;
-let maxRecordingTime = 20000; // default to 20 seconds
+let maxRecordingTime = 20000; // Default to 20 seconds
 let startTime;
 
 startBtn.addEventListener('click', async () => {
@@ -45,8 +45,8 @@ startBtn.addEventListener('click', async () => {
         }, maxRecordingTime);
 
     } catch (err) {
-        alert("Error: " + err.message);
-        console.error("Error: " + err);
+        alert("Error: " + (err.message || err.name || err));
+        console.error("Error: ", err);
         startBtn.disabled = false;
         stopBtn.disabled = true;
     }
@@ -60,8 +60,8 @@ stopBtn.addEventListener('click', () => {
         stopBtn.disabled = true;
         clearInterval(timer);
     } catch (err) {
-        alert("Error: " + err.message);
-        console.error("Error: " + err);
+        alert("Error: " + (err.message || err.name || err));
+        console.error("Error: ", err);
     }
 });
 
