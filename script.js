@@ -11,6 +11,12 @@ let maxRecordingTime = 20000; // Default to 20 seconds
 let startTime;
 
 startBtn.addEventListener('click', async () => {
+    // Check if getDisplayMedia is supported
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+        alert('Screen recording is not supported in this browser.');
+        return;
+    }
+
     startBtn.disabled = true;
     stopBtn.disabled = false;
 
