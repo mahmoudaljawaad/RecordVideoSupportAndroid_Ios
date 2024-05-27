@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screen Recording</title>
+    <title>Camera Recording</title>
 </head>
-
 <body>
-    <h1>Screen Recording Example</h1>
+    <h1>Camera Recording Example</h1>
     <button id="startBtn">Start Recording</button>
-    <button id="stopBtn" disabled>Stop Recording</button>
-    <p id="timer">00:00</p>
-    <video id="screenVideo" autoplay muted></video>
+    <button id="stopBtn" class="disabled">Stop Recording</button>
+    <video id="cameraVideo" autoplay muted></video>
     <h2>Recorded Video Preview</h2>
     <video id="recordedVideo" controls></video>
+    <p id="timer">00:00</p>
 
-
-    
-    <script src="script.js"></script>
+    <script src="cameraRecording.js"></script>
 </body>
-
 </html>

@@ -1,42 +1,317 @@
-const startBtn = document.getElementById('startBtn');
-const stopBtn = document.getElementById('stopBtn');
-const screenVideo = document.getElementById('screenVideo');
-const recordedVideo = document.getElementById('recordedVideo');
-const timerDisplay = document.getElementById('timer');
+const data = {
+    videoEl: null,
+    canvasEl: null,
+    fileData: null,
+    currentStream: null,
+    constraints: {},
+    selectedDevice: null,
+    options: [],
+};
 
-let mediaRecorder;
-let recordedChunks = [];
-let timer;
-let maxRecordingTime = 20000; // Default to 20 seconds
-let startTime;
-
-startBtn.addEventListener('click', async () => {
-    // Check if getDisplayMedia is supported
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-        alert('Screen recording is not supported in this browser.');
-        return;
+function enableBtn(id) {
+    let el = document.querySelector(`#${id}`);
+    if (el.classList.contains("disabled")) {
+        el.classList.remove("disabled");
     }
+}
 
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
+function disableBtn(id) {
+    let el = document.querySelector(`#${id}`);
+    if (!el.classList.contains("disabled")) {
+        el.classList.add("disabled");
+    }
+}
 
-    const displayMediaOptions = {
-        video: {
-            cursor: "always"
-        },
-        audio: false
+function hide(id) {
+    let el = document.querySelector(`#${id}`);
+    if (!el.classList.contains("hidden")) {
+        el.classList.add("hidden");
+    }
+}
+
+function show(id) {
+    let el = document.querySelector(`#${id}`);
+    if (el.classList.contains("hidden")) {
+        el.classList.remove("hidden");
+    }
+}
+
+async function deviceChange() {
+    stopVideoAndCanvas();
+    setConstraints();
+    const result = await getMedia();
+    console.log("device change:", result);
+}
+
+async function start() {
+    stop();
+    show("video-container");
+    enableBtn("camera");
+
+    const resultDevices = await getDevices();
+    data.selectedDevice = data.options[0].value;
+    setConstraints();
+    console.log("get devices:", resultDevices);
+    const resultMedia = await getMedia();
+    if (resultMedia) {
+        console.log("get media", resultMedia);
+        disableBtn("camera");
+        enableBtn("stop");
+        enableBtn("snapshot");
+    }
+}
+
+function setConstraints() {
+    const videoConstraints = {};
+    videoConstraints.deviceId = {
+        exact: data.selectedDevice,
     };
 
+    data.constraints = {
+        video: videoConstraints,
+        audio: false,
+    };
+}
+
+async function getMedia() {
     try {
-        const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-        screenVideo.srcObject = stream;
+        data.stream = await navigator.mediaDevices.getUserMedia(data.constraints);
+        window.stream = data.stream;
+        data.currentStream = window.stream;
+        data.videoEl.srcObject = window.stream;
+        return true;
+    } catch (err) {
+        alert("Error: " + (err.message || err.name || err));
+        console.error("Error: ", err);
+        return false;
+    }
+}
 
-        mediaRecorder = new MediaRecorder(stream, { mimeType: getSupportedMimeType() });
+function deviceOptionChange() {
+    const el = document.querySelector("#device-option");
+    const value = el.value;
+    const text = el.options[el.selectedIndex].text;
+    data.selectedDevice = value;
+    deviceChange();
+}
 
-        mediaRecorder.ondataavailable = handleDataAvailable;
-        mediaRecorder.onstop = handleStop;
+async function getDevices() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        console.log("enumerated devices not supported");
+        return false;
+    }
+    await navigator.mediaDevices.getUserMedia({ video: true });
 
-        mediaRecorder.start();
+    try {
+        let allDevices = await navigator.mediaDevices.enumerateDevices();
+        data.options = [];
+
+        // clear options before adding
+        let select_item = document.querySelector("#device-option");
+        let options = select_item.getElementsByTagName("option");
+        for (var i = options.length; i--; ) {
+            select_item.removeChild(options[i]);
+        }
+
+        // add options to camera facing selector
+        const videoInputDevices = allDevices.filter(
+            (device) => device.kind === "videoinput"
+        );
+        videoInputDevices.forEach((device) => {
+            let option = {};
+            option.text = device.label;
+            option.value = device.deviceId;
+            data.options.push(option);
+            var selection = document.createElement("option");
+            selection.value = option.value;
+            selection.text = option.text;
+            document.querySelector("#device-option").appendChild(selection);
+        });
+        if (options.length >= 1) show("device-form");
+        return true;
+    } catch (err) {
+        throw err;
+    }
+}
+
+function snapShot() {
+    show("canvas-container");
+    show("flip-button");
+    data.canvasEl.width = data.videoEl.videoWidth;
+    data.canvasEl.height = data.videoEl.videoHeight;
+    data.canvasEl
+        .getContext("2d")
+        .drawImage(data.videoEl, 0, 0, data.canvasEl.width, data.canvasEl.height);
+    data.fileData = data.canvasEl.toDataURL("image/jpeg");
+   
+    enableBtn("download");
+    enableBtn("share");
+}
+
+function stopVideoAndCanvas() {
+    data.videoEl.pause();
+    if (data.currentStream) {
+        data.currentStream.getTracks().forEach((track) => {
+            track.stop();
+        });
+        data.videoEl.srcObject = null;
+    }
+    if (data.videoEl) {
+        data.videoEl.removeAttribute("src");
+        data.videoEl.load();
+    }
+    if (data.canvasEl) {
+        data.canvasEl
+            .getContext("2d")
+            .clearRect(0, 0, data.canvasEl.width, data.canvasEl.height);
+    }
+}
+
+function stop() {
+    console.log("stop clicked");
+    stopVideoAndCanvas();
+    // hide video, canvas and form
+    hide("video-container");
+    hide("canvas-container");
+    if (document.querySelector("#device-form")) {
+        hide("device-form");
+        hide("flip-button");
+    }
+    enableBtn("camera");
+    disableBtn("stop");
+    disableBtn("download");
+    disableBtn("snapshot");
+    disableBtn("share");
+}
+
+function download() {
+    // cleanup any existing hidden links
+    let hiddenLinks = document.querySelectorAll(".hidden-links");
+    for (let hiddenLink of hiddenLinks) {
+        document.querySelector("body").removeChild(hiddenLink);
+    }
+
+    if (data.fileData) {
+        let a = document.createElement("a");
+        a.classList.add("hidden-link");
+        a.href = data.fileData;
+        a.textContent = "";
+        a.target = "_blank";
+        a.download = "photo.jpeg";
+        document.querySelector("body").append(a);
+        a.click();
+    }
+}
+
+async function share() {
+    let blob = await (await fetch(data.fileData)).blob();
+    const filesArray = [
+        new File([blob], "snapshot.jpg", {
+            type: blob.type,
+            lastModified: new Date().getTime(),
+        }),
+    ];
+    const shareData = {
+        files: filesArray,
+    };
+    try {
+        await navigator.share(shareData);
+        alert("Shared successfully");
+    } catch (error) {
+        alert("Error attempting to share");
+        console.log(error);
+    }
+}
+
+function flip() {
+    const videoCanvasContainer = document.querySelector("#video-canvas");
+    if (videoCanvasContainer.classList.contains("flex-row")) {
+        videoCanvasContainer.classList.remove("flex-row");
+        videoCanvasContainer.classList.remove("flex-wrap");
+        videoCanvasContainer.classList.add("flex-row-reverse");
+        videoCanvasContainer.classList.add("flex-wrap-reverse");
+    } else {
+        videoCanvasContainer.classList.remove("flex-row-reverse");
+        videoCanvasContainer.classList.remove("flex-wrap-reverse");
+        videoCanvasContainer.classList.add("flex-row");
+        videoCanvasContainer.classList.add("flex-wrap");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    let elements = document.querySelectorAll(".home button");
+
+    elements.forEach((element) => {
+        disableBtn(element.id);
+    });
+
+    // set video
+    data.videoEl = document.querySelector("#cameraVideo");
+    data.canvasEl = document.querySelector("#canvas");
+
+    // attach click event listeners
+    document.querySelector("#startBtn").addEventListener("click", () => {
+        console.log("camera click");
+        start();
+    });
+    document.querySelector("#snapshot").addEventListener("click", () => {
+        console.log("snapshot click");
+        snapShot();
+    });
+    document.querySelector("#stopBtn").addEventListener("click", () => {
+        console.log("camera stop");
+        stop();
+    });
+    document.querySelector("#download").addEventListener("click", () => {
+        console.log("camera download");
+        download();
+    });
+    document.querySelector("#share").addEventListener("click", () => {
+        console.log("camera share");
+        share();
+    });
+    document.querySelector("#flip").addEventListener("click", () => {
+        console.log("camera flip");
+        flip();
+    });
+
+    enableBtn("startBtn");
+});
+
+// Timer functionality
+let timer;
+let startTime;
+let maxRecordingTime = 20000; // 20 seconds
+
+function updateTimer() {
+    const elapsedTime = Date.now() - startTime;
+    const seconds = Math.floor((elapsedTime % 60000) / 1000);
+    const milliseconds = Math.floor((elapsedTime % 1000) / 100);
+
+    document.getElementById('timer').textContent = `${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`;
+
+    if (elapsedTime >= maxRecordingTime) {
+        clearInterval(timer);
+        document.getElementById('timer').textContent = "00:00";
+    }
+}
+
+// Modified start function with timer
+async function start() {
+    stop();
+    show("video-container");
+    enableBtn("camera");
+
+    const resultDevices = await getDevices();
+    data.selectedDevice = data.options[0].value;
+    setConstraints();
+    console.log("get devices:", resultDevices);
+    const resultMedia = await getMedia();
+    if (resultMedia) {
+        console.log("get media", resultMedia);
+        disableBtn("camera");
+        enableBtn("stop");
+        enableBtn("snapshot");
 
         // Start the timer
         startTime = Date.now();
@@ -44,91 +319,7 @@ startBtn.addEventListener('click', async () => {
 
         // Stop the recording after the specified time
         setTimeout(() => {
-            mediaRecorder.stop();
-            screenVideo.srcObject.getTracks().forEach(track => track.stop());
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
+            stop();
         }, maxRecordingTime);
-
-    } catch (err) {
-        alert("Error: " + (err.message || err.name || err));
-        console.error("Error: ", err);
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
     }
-});
-
-stopBtn.addEventListener('click', () => {
-    try {
-        mediaRecorder.stop();
-        screenVideo.srcObject.getTracks().forEach(track => track.stop());
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        clearInterval(timer);
-    } catch (err) {
-        alert("Error: " + (err.message || err.name || err));
-        console.error("Error: ", err);
-    }
-});
-
-function handleDataAvailable(event) {
-    if (event.data.size > 0) {
-        recordedChunks.push(event.data);
-    }
-}
-
-function handleStop() {
-    clearInterval(timer);
-    timerDisplay.textContent = "00:00";
-
-    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-    const url = URL.createObjectURL(blob);
-
-    // Download the recorded video
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'screen-recording.webm';
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-
-    // Show the recorded video in the video element
-    recordedVideo.src = url;
-    recordedVideo.controls = true;
-}
-
-function getSupportedMimeType() {
-    const mimeTypes = [
-        'video/webm;codecs=vp9',
-        'video/webm;codecs=vp8',
-        'video/webm',
-        'video/mp4'
-    ];
-
-    for (const mimeType of mimeTypes) {
-        if (MediaRecorder.isTypeSupported(mimeType)) {
-            return mimeType;
-        }
-    }
-
-    throw new Error('No supported MIME types.');
-}
-
-function updateTimer() {
-    const elapsedTime = Date.now() - startTime;
-    const seconds = Math.floor((elapsedTime % 60000) / 1000);
-    const milliseconds = Math.floor((elapsedTime % 1000) / 100);
-
-    timerDisplay.textContent = `${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`;
-
-    if (elapsedTime >= maxRecordingTime) {
-        clearInterval(timer);
-        timerDisplay.textContent = "00:00";
-    }
-}
-
-// Function to set a custom recording duration (optional)
-function setMaxRecordingTime(duration) {
-    maxRecordingTime = duration;
 }
