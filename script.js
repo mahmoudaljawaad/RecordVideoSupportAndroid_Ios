@@ -17,7 +17,7 @@ async function startCapture() {
     try {
         mediaStream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment' }, // Use back camera
-            audio: true
+            audio: false
         });
         videoElement.srcObject = mediaStream;
     } catch (error) {
