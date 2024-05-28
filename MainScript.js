@@ -7251,6 +7251,8 @@ function initCameraUI() {
         );
       });
     });
+    toggleFullScreenButton.click()
+
   } else {
     console.log("iOS doesn't support fullscreen (yet)");
   }
