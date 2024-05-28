@@ -1,53 +1,47 @@
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1"
-    />
-    <meta
-      name="description"
-      content="Smart Device Camera Template for HTML, CSS, JS and WebRTC"
-    />
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Smart Device Camera Template for HTML, CSS, JS and WebRTC" />
     <meta name="keywords" content="HTML,CSS,JavaScript, WebRTC, Camera" />
     <meta name="author" content="Kasper Kamperman" />
     <title>Mobile First Camera Template</title>
     <link rel="stylesheet" type="text/css" href="style1.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  </head>
-  <body>
+</head>
 
-
-    
+<body>
     <div id="container">
-      <div id="vid_container">
-        <video id="video" autoplay playsinline></video>
-        <video id="RecordedVideo" autoplay playsinline></video>
+        <div id="vid_container">
+            <video id="video" autoplay playsinline></video>
+            <video id="RecordedVideo" class="hidden" autoplay playsinline></video>
 
-        <div id="video_overlay"></div>
-      </div>
-      <div id="gui_controls">
-        <button
-          id="switchCameraButton"
-          name="switch Camera"
-          type="button"
-          aria-pressed="false"
-        ></button>
-        <button id="takePhotoButton" onclic name="take Photo" type="button"></button>
-        <button
-          id="toggleFullScreenButton"
-          name="toggle FullScreen"
-          type="button"
-          aria-pressed="false"
-        ></button>
-      </div>
+            <div id="video_overlay"></div>
+        </div>
+        <div id="gui_controls">
+            <!-- Rotate Camera -->
+            <button id="switchCameraButton" name="switch Camera" type="button" aria-pressed="false"></button>
+
+             <button type="button" class="btn btn-primary" id="startbutton" onclick="startRecord()">
+                <i class="bi bi-play-fill" style="font-size: 40px;color: #1fb41f;"></i>
+            </button>
+
+            <button type="button" class="btn btn-primary hidden" id="StopButton" onclick="stopRecord()">
+                <i class="bi bi-stop-fill" style="font-size: 40px;color: red;"></i>
+            </button>
+
+            <!-- Submit Gose Here -->
+            <button class="hidden" id="toggleFullScreenButton" name="toggle FullScreen" type="button" aria-pressed="false"></button>
+        </div>
     </div>
 
     <script src="MainScript.js"></script>
     <script src="script.js"></script>
 
-  </body>
+</body>
+
 </html>
