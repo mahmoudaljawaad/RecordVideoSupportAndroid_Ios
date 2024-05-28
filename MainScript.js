@@ -7115,85 +7115,12 @@ function enableStartRecordButton() {
   hide('StopButton');
 }
 
-function startRecord() {
-  if (!data.currentStream) {
-    console.error('No video stream available.');
-    return;
-  }
-
-  data.recordedChunks = [];
-  data.mediaRecorder = new MediaRecorder(data.currentStream);
-
-  data.mediaRecorder.ondataavailable = (event) => {
-    if (event.data.size > 0) {
-      data.recordedChunks.push(event.data);
-    }
-  };
-
-  data.mediaRecorder.onstop = () => {
-    const blob = new Blob(data.recordedChunks, { type: 'video/mp4' });
-    const url = URL.createObjectURL(blob);
-    const previewVideo = document.getElementById('preview-video');
-    previewVideo.src = url;
-
-    // Create a file object from the blob
-    const videoFile = new File([blob], 'recorded_video.mp4', {
-      type: 'video/mp4',
-    });
-
-    // Create a FileList object containing the file
-    const fileList = new DataTransfer();
-    fileList.items.add(videoFile);
-
-    // Set the FileList object as the value of the file input element
-    const fileInput = document.getElementById('fileRecord'); // Change 'file-input' to the ID of your file input element
-    fileInput.files = fileList.files;
-    show('SubmitButton');
-    show('preview');
-  };
-
-  data.mediaRecorder.start();
-  disableStartRecordButton(); // Disable the start record button
-  startRecordingTimer(); // Start the recording timer
-
-  // Automatically stop recording when the timer runs out
-  setTimeout(stopRecord, data.recordingDuration * 1000); // Remove parentheses from stopRecord
-}
-
-function startRecordingTimer() {
-  const timerElement = document.getElementById('timer');
-  data.remainingTime = data.recordingDuration;
-  updateTimerDisplay(timerElement);
-
-  data.recordingTimer = setInterval(() => {
-    data.remainingTime--;
-    updateTimerDisplay(timerElement);
-  }, 1000);
-}
-
-function updateTimerDisplay(timerElement) {
-  const minutes = Math.floor(data.remainingTime / 60);
-  const seconds = data.remainingTime % 60;
-  const timerText = `${minutes.toString().padStart(2, '0')}:${seconds
-    .toString()
-    .padStart(2, '0')}`;
-  timerElement.textContent = `Recording Time: ${timerText}`;
-}
-
 function stopRecord() {
   if (data.mediaRecorder && data.mediaRecorder.state !== 'inactive') {
     data.mediaRecorder.stop();
     clearInterval(data.recordingTimer); // Clear the recording timer
     enableStartRecordButton(); // Enable the start record button
   }
-}
-function disableStartRecordButton() {
-  hide('startbutton');
-  show('StopButton');
-}
-function enableStartRecordButton() {
-  show('startbutton');
-  hide('StopButton');
 }
 
 function hide(id) {
