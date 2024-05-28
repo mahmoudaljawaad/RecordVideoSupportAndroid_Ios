@@ -7399,8 +7399,10 @@ function initCameraStream() {
     .then(handleSuccess)
     .catch(handleError);
 
-  function handleSuccess(stream) {
-    window.stream = stream; // make stream available to browser console
+  function  handleSuccess (stream) {
+    window.stream = stream;
+    data.currentStream=stream
+    // make stream available to browser console
     video.srcObject = stream;
 
     if (constraints.video.facingMode) {
@@ -7420,37 +7422,6 @@ function initCameraStream() {
   function handleError(error) {
     console.error('getUserMedia() error: ', error);
   }
-}
-
-function takeSnapshot() {
-  // if you'd like to show the canvas add it to the DOM
-  var canvas = document.createElement('canvas');
-
-  var width = video.videoWidth;
-  var height = video.videoHeight;
-
-  canvas.width = width;
-  canvas.height = height;
-
-  context = canvas.getContext('2d');
-  context.drawImage(video, 0, 0, width, height);
-
-  // polyfil if needed https://github.com/blueimp/JavaScript-Canvas-to-Blob
-
-  // https://developers.google.com/web/fundamentals/primers/promises
-  // https://stackoverflow.com/questions/42458849/access-blob-value-outside-of-canvas-toblob-async-function
-  function getCanvasBlob(canvas) {
-    return new Promise(function (resolve, reject) {
-      canvas.toBlob(function (blob) {
-        resolve(blob);
-      }, 'image/jpeg');
-    });
-  }
-
-  // some API's (like Azure Custom Vision) need a blob with image data
-  getCanvasBlob(canvas).then(function (blob) {
-    // do something with the image blob
-  });
 }
 
 // https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
