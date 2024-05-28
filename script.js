@@ -1,4 +1,3 @@
-
 const data = {
   videoEl: null,
   canvasEl: null,
