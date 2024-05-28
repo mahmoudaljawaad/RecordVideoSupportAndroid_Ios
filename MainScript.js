@@ -7047,7 +7047,7 @@ function startRecord() {
   data.mediaRecorder.onstop = () => {
     const blob = new Blob(data.recordedChunks, { type: 'video/mp4' });
     const url = URL.createObjectURL(blob);
-    const previewVideo = document.getElementById('preview-video');
+    const previewVideo = document.getElementById('RecordedVideo');
     previewVideo.src = url;
 
     // Create a file object from the blob
@@ -7064,6 +7064,11 @@ function startRecord() {
     fileInput.files = fileList.files;
     show('SubmitButton');
     show('preview');
+
+
+    hide("video")
+    show("RecordedVideo")
+
   };
 
   data.mediaRecorder.start();
