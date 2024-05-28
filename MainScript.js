@@ -7228,9 +7228,9 @@ function initCameraUI() {
 
   function fullScreenChange() {
     if (screenfull.isFullscreen) {
-      toggleFullScreenButton.setAttribute('aria-pressed', true);
-    } else {
       toggleFullScreenButton.setAttribute('aria-pressed', false);
+    } else {
+      toggleFullScreenButton.setAttribute('aria-pressed', true);
     }
   }
 
@@ -7336,9 +7336,9 @@ function initCameraStream() {
 
     if (constraints.video.facingMode) {
       if (constraints.video.facingMode === 'environment') {
-        switchCameraButton.setAttribute('aria-pressed', false);
-      } else {
         switchCameraButton.setAttribute('aria-pressed', true);
+      } else {
+        switchCameraButton.setAttribute('aria-pressed', false);
       }
     }
 
