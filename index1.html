@@ -20,22 +20,10 @@
   </head>
   <body>
     <div id="container">
-        <div class="mt-10 ">
-            <h1>Web API Camera</h1>
-        </div>
-        <div class="row " class="justify-content-center" style="margin-top:10px;margin-bottom:20px">
-            <div>
-                <form id="device-form" class="hidden">
-                    <label for="device-option">Chose Camera:</label>
-                    <select class="form-select" name="device-option" id="device-option" onchange="deviceOptionChange()"
-                        form="device-option-form">
-                    </select>
-                </form>
-            </div>
-        </div>
-
       <div id="vid_container">
-        <video id="video" autoplay playsinline></video>
+        <!-- <video id="video" autoplay playsinline></video> -->
+        <video id="RecordedVideo" src="SampleVideo_720x480_5mb.mp4" autoplay playsinline></video>
+
         <div id="video_overlay"></div>
       </div>
       <div id="gui_controls">
@@ -45,7 +33,7 @@
           type="button"
           aria-pressed="false"
         ></button>
-        <button id="takePhotoButton" name="take Photo" type="button"></button>
+        <button id="takePhotoButton" onclic name="take Photo" type="button"></button>
         <button
           id="toggleFullScreenButton"
           name="toggle FullScreen"
