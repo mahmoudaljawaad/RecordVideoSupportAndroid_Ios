@@ -71,12 +71,11 @@ body {
 
   
   #toggleFullScreenButton,#SubmitButton {
-    display: none;
+    border: 0px !important;
     width: 64px;
     height: 64px;
-    background-image: url('img/ic_fullscreen_white_48px.svg');
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
   }
   
   #toggleFullScreenButton[aria-pressed='true'] {
@@ -118,8 +117,12 @@ body {
       top: calc(50% - 32px);
     }
   
-    #toggleFullScreenButton,#SubmitButton {
+    #toggleFullScreenButton {
       left: calc(80% - 32px);
+      top: calc(50% - 32px);
+    }
+    #SubmitButton {
+      left: calc(80% - 0px);
       top: calc(50% - 32px);
     }
   }
@@ -151,8 +154,12 @@ body {
       top: calc(18% - 32px);
     }
   
-    #toggleFullScreenButton,#SubmitButton {
+    #toggleFullScreenButton {
       left: calc(50% - 32px);
+      top: calc(82% - 32px);
+    }
+    #SubmitButton {
+      left: calc(50% - 0px);
       top: calc(82% - 32px);
     }
   }
