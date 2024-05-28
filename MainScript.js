@@ -7346,11 +7346,13 @@ function initCameraStream() {
     const settings = track.getSettings();
     str = JSON.stringify(settings, null, 4);
     console.log('settings ' + str);
+    document.getElementById('toggleFullScreenButton').click()
   }
 
   function handleError(error) {
     console.error('getUserMedia() error: ', error);
   }
+
 }
 
 // https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
@@ -7383,4 +7385,3 @@ function createClickFeedbackUI() {
     }
   };
 }
-document.getElementById('toggleFullScreenButton').click()
