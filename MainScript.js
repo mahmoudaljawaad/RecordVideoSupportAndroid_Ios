@@ -7336,9 +7336,9 @@ function initCameraStream() {
 
     if (constraints.video.facingMode) {
       if (constraints.video.facingMode === 'environment') {
-        switchCameraButton.setAttribute('aria-pressed', true);
-      } else {
         switchCameraButton.setAttribute('aria-pressed', false);
+      } else {
+        switchCameraButton.setAttribute('aria-pressed', true);
       }
     }
 
@@ -7346,7 +7346,6 @@ function initCameraStream() {
     const settings = track.getSettings();
     str = JSON.stringify(settings, null, 4);
     console.log('settings ' + str);
-    document.getElementById('toggleFullScreenButton').click()
   }
 
   function handleError(error) {
