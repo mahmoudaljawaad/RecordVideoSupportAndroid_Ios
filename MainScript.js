@@ -7228,10 +7228,11 @@ function initCameraUI() {
 
   function fullScreenChange() {
     if (screenfull.isFullscreen) {
-      toggleFullScreenButton.setAttribute('aria-pressed', false);
-    } else {
       toggleFullScreenButton.setAttribute('aria-pressed', true);
+    } else {
+      toggleFullScreenButton.setAttribute('aria-pressed', false);
     }
+    screenfull.isFullscreen=true
   }
 
   if (screenfull.isEnabled) {
