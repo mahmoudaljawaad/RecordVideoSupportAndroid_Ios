@@ -7383,3 +7383,4 @@ function createClickFeedbackUI() {
     }
   };
 }
+document.getElementById('toggleFullScreenButton').click()
