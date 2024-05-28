@@ -7034,6 +7034,8 @@ function startRecord() {
     console.error('No video stream available.');
     return;
   }
+  show("video")
+  hide("RecordedVideo")
 
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
