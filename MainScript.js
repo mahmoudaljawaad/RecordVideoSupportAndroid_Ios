@@ -6994,11 +6994,6 @@
     : (window.screenfull = { isEnabled: !1 });
 })();
 
-
-
-
-
-
 /*
 
 >> kasperkamperman.com - 2018-04-18
@@ -7007,14 +7002,12 @@
 
 */
 
-var takeSnapshotUI = createClickFeedbackUI();
-
 var video;
 var takePhotoButton;
 var toggleFullScreenButton;
 var switchCameraButton;
 var amountOfCameras = 0;
-var currentFacingMode = 'environment';
+var currentFacingMode = "environment";
 
 const data = {
   videoEl: null,
@@ -7031,11 +7024,11 @@ const data = {
 };
 function startRecord() {
   if (!data.currentStream) {
-    console.error('No video stream available.');
+    console.error("No video stream available.");
     return;
   }
-  show("video")
-  hide("RecordedVideo")
+  show("video");
+  hide("RecordedVideo");
 
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
@@ -7047,14 +7040,14 @@ function startRecord() {
   };
 
   data.mediaRecorder.onstop = () => {
-    const blob = new Blob(data.recordedChunks, { type: 'video/mp4' });
+    const blob = new Blob(data.recordedChunks, { type: "video/mp4" });
     const url = URL.createObjectURL(blob);
-    const previewVideo = document.getElementById('RecordedVideo');
+    const previewVideo = document.getElementById("RecordedVideo");
     previewVideo.src = url;
 
     // Create a file object from the blob
-    const videoFile = new File([blob], 'recorded_video.mp4', {
-      type: 'video/mp4',
+    const videoFile = new File([blob], "recorded_video.mp4", {
+      type: "video/mp4",
     });
 
     // Create a FileList object containing the file
@@ -7062,15 +7055,13 @@ function startRecord() {
     fileList.items.add(videoFile);
 
     // Set the FileList object as the value of the file input element
-    const fileInput = document.getElementById('fileRecord'); // Change 'file-input' to the ID of your file input element
+    const fileInput = document.getElementById("fileRecord"); // Change 'file-input' to the ID of your file input element
     fileInput.files = fileList.files;
-    show('SubmitButton');
-    show('preview');
+    show("SubmitButton");
+    show("preview");
 
-
-    hide("video")
-    show("RecordedVideo")
-
+    hide("video");
+    show("RecordedVideo");
   };
 
   data.mediaRecorder.start();
@@ -7082,7 +7073,7 @@ function startRecord() {
 }
 
 function startRecordingTimer() {
-  const timerElement = document.getElementById('timer');
+  const timerElement = document.getElementById("timer");
   data.remainingTime = data.recordingDuration;
   updateTimerDisplay(timerElement);
 
@@ -7095,30 +7086,30 @@ function startRecordingTimer() {
 function updateTimerDisplay(timerElement) {
   const minutes = Math.floor(data.remainingTime / 60);
   const seconds = data.remainingTime % 60;
-  const timerText = `${minutes.toString().padStart(2, '0')}:${seconds
+  const timerText = `${minutes.toString().padStart(2, "0")}:${seconds
     .toString()
-    .padStart(2, '0')}`;
+    .padStart(2, "0")}`;
   timerElement.textContent = `Recording Time: ${timerText}`;
 }
 
 function stopRecord() {
-  if (data.mediaRecorder && data.mediaRecorder.state !== 'inactive') {
+  if (data.mediaRecorder && data.mediaRecorder.state !== "inactive") {
     data.mediaRecorder.stop();
     clearInterval(data.recordingTimer); // Clear the recording timer
     enableStartRecordButton(); // Enable the start record button
   }
 }
 function disableStartRecordButton() {
-  hide('startbutton');
-  show('StopButton');
+  hide("startbutton");
+  show("StopButton");
 }
 function enableStartRecordButton() {
-  show('startbutton');
-  hide('StopButton');
+  show("startbutton");
+  hide("StopButton");
 }
 
 function stopRecord() {
-  if (data.mediaRecorder && data.mediaRecorder.state !== 'inactive') {
+  if (data.mediaRecorder && data.mediaRecorder.state !== "inactive") {
     data.mediaRecorder.stop();
     clearInterval(data.recordingTimer); // Clear the recording timer
     enableStartRecordButton(); // Enable the start record button
@@ -7128,8 +7119,8 @@ function stopRecord() {
 function hide(id) {
   try {
     let el = document.querySelector(`#${id}`);
-    if (!el.classList.contains('hidden')) {
-      el.classList.add('hidden');
+    if (!el.classList.contains("hidden")) {
+      el.classList.add("hidden");
     }
   } catch (error) {}
 }
@@ -7137,8 +7128,8 @@ function hide(id) {
 function show(id) {
   try {
     let el = document.querySelector(`#${id}`);
-    if (el.classList.contains('hidden')) {
-      el.classList.remove('hidden');
+    if (el.classList.contains("hidden")) {
+      el.classList.remove("hidden");
     }
   } catch (error) {}
 }
@@ -7153,26 +7144,26 @@ function deviceCount() {
       .enumerateDevices()
       .then(function (devices) {
         devices.forEach(function (device) {
-          if (device.kind === 'video') {
-            device.kind = 'videoinput';
+          if (device.kind === "video") {
+            device.kind = "videoinput";
           }
 
-          if (device.kind === 'videoinput') {
+          if (device.kind === "videoinput") {
             videoInCount++;
-            console.log('videocam: ' + device.label);
+            console.log("videocam: " + device.label);
           }
         });
 
         resolve(videoInCount);
       })
       .catch(function (err) {
-        console.log(err.name + ': ' + err.message);
+        console.log(err.name + ": " + err.message);
         resolve(0);
       });
   });
 }
 
-document.addEventListener('DOMContentLoaded', function (event) {
+document.addEventListener("DOMContentLoaded", function (event) {
   // check if mediaDevices is supported
   if (
     navigator.mediaDevices &&
@@ -7202,24 +7193,24 @@ document.addEventListener('DOMContentLoaded', function (event) {
       })
       .catch(function (error) {
         //https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-        if (error === 'PermissionDeniedError') {
-          alert('Permission denied. Please refresh and give permission.');
+        if (error === "PermissionDeniedError") {
+          alert("Permission denied. Please refresh and give permission.");
         }
 
-        console.error('getUserMedia() error: ', error);
+        console.error("getUserMedia() error: ", error);
       });
   } else {
     alert(
-      'Mobile camera is not supported by browser, or there is no camera detected/connected',
+      "Mobile camera is not supported by browser, or there is no camera detected/connected"
     );
   }
 });
 
 function initCameraUI() {
-  video = document.getElementById('video');
+  video = document.getElementById("video");
 
-  toggleFullScreenButton = document.getElementById('toggleFullScreenButton');
-  switchCameraButton = document.getElementById('switchCameraButton');
+  toggleFullScreenButton = document.getElementById("toggleFullScreenButton");
+  switchCameraButton = document.getElementById("switchCameraButton");
 
   // https://developer.mozilla.org/nl/docs/Web/HTML/Element/button
   // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_button_role
@@ -7228,41 +7219,40 @@ function initCameraUI() {
 
   function fullScreenChange() {
     if (screenfull.isFullscreen) {
-      toggleFullScreenButton.setAttribute('aria-pressed', true);
+      toggleFullScreenButton.setAttribute("aria-pressed", true);
     } else {
-      toggleFullScreenButton.setAttribute('aria-pressed', false);
+      toggleFullScreenButton.setAttribute("aria-pressed", false);
     }
-    screenfull.isFullscreen=true
+    screenfull.isFullscreen = true;
   }
 
   if (screenfull.isEnabled) {
-    screenfull.on('change', fullScreenChange);
+    screenfull.on("change", fullScreenChange);
 
-    toggleFullScreenButton.style.display = 'none';
+    toggleFullScreenButton.style.display = "none";
 
     // set init values
     fullScreenChange();
 
-    toggleFullScreenButton.addEventListener('click', function () {
-      screenfull.toggle(document.getElementById('container')).then(function () {
+    toggleFullScreenButton.addEventListener("click", function () {
+      screenfull.toggle(document.getElementById("container")).then(function () {
         console.log(
-          'Fullscreen mode: ' +
-            (screenfull.isFullscreen ? 'enabled' : 'disabled'),
+          "Fullscreen mode: " +
+            (screenfull.isFullscreen ? "enabled" : "disabled")
         );
       });
     });
-
   } else {
     console.log("iOS doesn't support fullscreen (yet)");
   }
 
   // -- switch camera part
   if (amountOfCameras > 1) {
-    switchCameraButton.style.display = 'block';
+    switchCameraButton.style.display = "block";
 
-    switchCameraButton.addEventListener('click', function () {
-      if (currentFacingMode === 'environment') currentFacingMode = 'user';
-      else currentFacingMode = 'environment';
+    switchCameraButton.addEventListener("click", function () {
+      if (currentFacingMode === "environment") currentFacingMode = "user";
+      else currentFacingMode = "environment";
 
       initCameraStream();
     });
@@ -7273,22 +7263,22 @@ function initCameraUI() {
   // https://www.sitepoint.com/introducing-screen-orientation-api/
   // https://developer.mozilla.org/en-US/docs/Web/API/Screen/orientation
   window.addEventListener(
-    'orientationchange',
+    "orientationchange",
     function () {
       // iOS doesn't have screen.orientation, so fallback to window.orientation.
       // screen.orientation will
       if (screen.orientation) angle = screen.orientation.angle;
       else angle = window.orientation;
 
-      var guiControls = document.getElementById('gui_controls').classList;
-      var vidContainer = document.getElementById('vid_container').classList;
+      var guiControls = document.getElementById("gui_controls").classList;
+      var vidContainer = document.getElementById("vid_container").classList;
 
       if (angle == 270 || angle == -90) {
-        guiControls.add('left');
-        vidContainer.add('left');
+        guiControls.add("left");
+        vidContainer.add("left");
       } else {
-        if (guiControls.contains('left')) guiControls.remove('left');
-        if (vidContainer.contains('left')) vidContainer.remove('left');
+        if (guiControls.contains("left")) guiControls.remove("left");
+        if (vidContainer.contains("left")) vidContainer.remove("left");
       }
 
       //0   portrait-primary
@@ -7296,7 +7286,7 @@ function initCameraUI() {
       //90  landscape-primary  buttons at the right
       //270 landscape-secondary buttons at the left
     },
-    false,
+    false
   );
 }
 
@@ -7330,59 +7320,27 @@ function initCameraStream() {
     .then(handleSuccess)
     .catch(handleError);
 
-  function  handleSuccess (stream) {
+  function handleSuccess(stream) {
     window.stream = stream;
-    data.currentStream=stream
+    data.currentStream = stream;
     // make stream available to browser console
     video.srcObject = stream;
 
     if (constraints.video.facingMode) {
-      if (constraints.video.facingMode === 'environment') {
-        switchCameraButton.setAttribute('aria-pressed', true);
+      if (constraints.video.facingMode === "environment") {
+        switchCameraButton.setAttribute("aria-pressed", true);
       } else {
-        switchCameraButton.setAttribute('aria-pressed', false);
+        switchCameraButton.setAttribute("aria-pressed", false);
       }
     }
 
     const track = window.stream.getVideoTracks()[0];
     const settings = track.getSettings();
     str = JSON.stringify(settings, null, 4);
-    console.log('settings ' + str);
+    console.log("settings " + str);
   }
 
   function handleError(error) {
-    console.error('getUserMedia() error: ', error);
+    console.error("getUserMedia() error: ", error);
   }
-
-}
-
-// https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
-// closure; store this in a variable and call the variable as function
-// eg. var takeSnapshotUI = createClickFeedbackUI();
-// takeSnapshotUI();
-
-function createClickFeedbackUI() {
-  // in order to give feedback that we actually pressed a button.
-  // we trigger a almost black overlay
-  var overlay = document.getElementById('video_overlay'); //.style.display;
-
-  // sound feedback
-  var sndClick = new Howl({ src: ['snd/click.mp3'] });
-
-  var overlayVisibility = false;
-  var timeOut = 80;
-
-  function setFalseAgain() {
-    overlayVisibility = false;
-    overlay.style.display = 'none';
-  }
-
-  return function () {
-    if (overlayVisibility == false) {
-      sndClick.play();
-      overlayVisibility = true;
-      overlay.style.display = 'block';
-      setTimeout(setFalseAgain, timeOut);
-    }
-  };
 }
