@@ -70,7 +70,7 @@ body {
     }
 
   
-  #toggleFullScreenButton {
+  #toggleFullScreenButton,#SubmitButton {
     display: none;
     width: 64px;
     height: 64px;
@@ -118,7 +118,7 @@ body {
       top: calc(50% - 32px);
     }
   
-    #toggleFullScreenButton {
+    #toggleFullScreenButton,#SubmitButton {
       left: calc(80% - 32px);
       top: calc(50% - 32px);
     }
@@ -151,7 +151,7 @@ body {
       top: calc(18% - 32px);
     }
   
-    #toggleFullScreenButton {
+    #toggleFullScreenButton,#SubmitButton {
       left: calc(50% - 32px);
       top: calc(82% - 32px);
     }
