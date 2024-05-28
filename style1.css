@@ -56,7 +56,9 @@ body {
     pointer-events: auto;
     z-index: 2;
   }
-  
+  .hidden{
+    display: none;
+  }
   #takePhotoButton,#StopButton,#startbutton {
     left: calc(50% - 40px);
     top: calc(50% - 40px);
