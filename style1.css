@@ -159,7 +159,7 @@ body {
       top: calc(82% - 32px);
     }
     #SubmitButton {
-      left: calc(50% - 0px);
+      left: calc(50% - 32px);
       top: calc(82% - 32px);
     }
   }
