@@ -7364,8 +7364,7 @@ function takeSnapshot() {
   canvas.height = height;
 
   context = canvas.getContext('2d');
-
-  context.drawImage(RecordedVideoFrame.src, 0, 0, width, height);
+  context.drawImage(video, 0, 0, width, height);
 
   // polyfil if needed https://github.com/blueimp/JavaScript-Canvas-to-Blob
 
@@ -7386,29 +7385,29 @@ function takeSnapshot() {
 }
 
 function createClickFeedbackUI() {
-  // // in order to give feedback that we actually pressed a button.
-  // // we trigger a almost black overlay
-  // var overlay = document.getElementById('RecordedVideoFrame'); //.style.display;
+  // in order to give feedback that we actually pressed a button.
+  // we trigger a almost black overlay
+  var overlay = document.getElementById('RecordedVideoFrame'); //.style.display;
 
-  // // sound feedback
-  // var sndClick = new Howl({ src: ['snd/click.mp3'] });
+  // sound feedback
+  var sndClick = new Howl({ src: ['snd/click.mp3'] });
 
-  // var overlayVisibility = false;
-  // var timeOut = 80;
+  var overlayVisibility = false;
+  var timeOut = 80;
 
-  // function setFalseAgain() {
-  //   overlayVisibility = false;
-  //   overlay.style.display = 'none';
-  // }
+  function setFalseAgain() {
+    overlayVisibility = false;
+    overlay.style.display = 'block';
+  }
 
-  // return function () {
-  //   if (overlayVisibility == false) {
-  //     sndClick.play();
-  //     overlayVisibility = true;
-  //     overlay.style.display = 'block';
-  //     setTimeout(setFalseAgain, timeOut);
-  //   }
-  // };
+  return function () {
+    if (overlayVisibility == false) {
+      sndClick.play();
+      overlayVisibility = true;
+      overlay.style.display = 'block';
+      setTimeout(setFalseAgain, timeOut);
+    }
+  };
 }
 
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
