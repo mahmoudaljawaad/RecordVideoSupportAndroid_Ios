@@ -7387,7 +7387,7 @@ function takeSnapshot() {
 function createClickFeedbackUI() {
   // in order to give feedback that we actually pressed a button.
   // we trigger a almost black overlay
-  var overlay = document.getElementById('video_overlay'); //.style.display;
+  var overlay = document.getElementById('RecordedVideoFrame'); //.style.display;
 
   // sound feedback
   var sndClick = new Howl({ src: ['snd/click.mp3'] });
