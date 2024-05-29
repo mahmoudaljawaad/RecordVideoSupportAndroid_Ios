@@ -7360,12 +7360,16 @@ document
   .addEventListener("click", (e) => {
     show("RecordedVideo");
     show("CloseBtn");
+    hide("timer");
+
     hide("video");
   });
 document.getElementById("CloseBtn").addEventListener("click", (e) => {
   hide("RecordedVideo");
   hide("CloseBtn");
   show("video");
+  hide("show");
+
 });
 
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
