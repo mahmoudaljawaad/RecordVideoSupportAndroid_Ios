@@ -7001,7 +7001,6 @@
 >> https://www.kasperkamperman.com/blog/camera-template/
 
 */
-var takeSnapshotUI = createClickFeedbackUI();
 var video;
 var takePhotoButton;
 var toggleFullScreenButton;
@@ -7022,15 +7021,15 @@ const data = {
   recordingTimer: null,
   recordingDuration: 20, // in seconds
 };
+
 function startRecord() {
   if (!data.currentStream) {
     console.error("No video stream available.");
     return;
   }
-
   show("video");
   hide("RecordedVideo");
-  document.getElementById('takePhotoButton').click()
+
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
 
@@ -7063,8 +7062,6 @@ function startRecord() {
 
     show("video");
     hide("RecordedVideo");
-    hide("timer");
-
   };
 
   data.mediaRecorder.start();
@@ -7102,21 +7099,15 @@ function stopRecord() {
     enableStartRecordButton(); // Enable the start record button
   }
 }
+
 function disableStartRecordButton() {
   hide("startbutton");
   show("StopButton");
 }
+
 function enableStartRecordButton() {
   show("startbutton");
   hide("StopButton");
-}
-
-function stopRecord() {
-  if (data.mediaRecorder && data.mediaRecorder.state !== "inactive") {
-    data.mediaRecorder.stop();
-    clearInterval(data.recordingTimer); // Clear the recording timer
-    enableStartRecordButton(); // Enable the start record button
-  }
 }
 
 function hide(id) {
@@ -7137,8 +7128,25 @@ function show(id) {
   } catch (error) {}
 }
 
-// this function counts the amount of video inputs
-// it replaces DetectRTC that was previously implemented.
+// This function takes a snapshot from the video and displays it in the img element
+function takeSnapshot() {
+  if (!data.currentStream) {
+    console.error("No video stream available.");
+    return;
+  }
+
+  const video = document.getElementById("video");
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const context = canvas.getContext("2d");
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  const img = document.getElementById("RecordedVideoFrame");
+  img.src = canvas.toDataURL("image/png");
+}
+
+// This function counts the amount of video inputs and replaces DetectRTC that was previously implemented.
 function deviceCount() {
   return new Promise(function (resolve) {
     var videoInCount = 0;
@@ -7167,15 +7175,15 @@ function deviceCount() {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-  // check if mediaDevices is supported
+  // Check if mediaDevices is supported
   if (
     navigator.mediaDevices &&
     navigator.mediaDevices.getUserMedia &&
     navigator.mediaDevices.enumerateDevices
   ) {
-    // first we call getUserMedia to trigger permissions
-    // we need this before deviceCount, otherwise Safari doesn't return all the cameras
-    // we need to have the number in order to display the switch front/back button
+    // First we call getUserMedia to trigger permissions
+    // We need this before deviceCount, otherwise Safari doesn't return all the cameras
+    // We need to have the number in order to display the switch front/back button
     navigator.mediaDevices
       .getUserMedia({
         audio: false,
@@ -7189,7 +7197,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         deviceCount().then(function (deviceCount) {
           amountOfCameras = deviceCount;
 
-          // init the UI and the camera stream
+          // Init the UI and the camera stream
           initCameraUI();
           initCameraStream();
         });
@@ -7212,17 +7220,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
 function initCameraUI() {
   video = document.getElementById("video");
 
-  takePhotoButton = document.getElementById('takePhotoButton');
-
   toggleFullScreenButton = document.getElementById("toggleFullScreenButton");
   switchCameraButton = document.getElementById("switchCameraButton");
 
-  takePhotoButton.addEventListener('click', function () {
-    takeSnapshotUI();
-    takeSnapshot();
-  });
+  // https://developer.mozilla.org/nl/docs/Web/HTML/Element/button
+  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_button_role
 
-  
+  // -- Fullscreen part
 
   function fullScreenChange() {
     if (screenfull.isFullscreen) {
@@ -7238,7 +7242,7 @@ function initCameraUI() {
 
     toggleFullScreenButton.style.display = "none";
 
-    // set init values
+    // Set init values
     fullScreenChange();
 
     toggleFullScreenButton.addEventListener("click", function () {
@@ -7253,7 +7257,7 @@ function initCameraUI() {
     console.log("iOS doesn't support fullscreen (yet)");
   }
 
-  // -- switch camera part
+  // -- Switch camera part
   if (amountOfCameras > 1) {
     switchCameraButton.style.display = "block";
 
@@ -7299,7 +7303,7 @@ function initCameraUI() {
 
 // https://github.com/webrtc/samples/blob/gh-pages/src/content/devices/input-output/js/main.js
 function initCameraStream() {
-  // stop any active streams in the window
+  // Stop any active streams in the window
   if (window.stream) {
     window.stream.getTracks().forEach(function (track) {
       console.log(track);
@@ -7307,7 +7311,7 @@ function initCameraStream() {
     });
   }
 
-  // we ask for a square resolution, it will cropped on top (landscape)
+  // We ask for a square resolution, it will cropped on top (landscape)
   // or cropped at the sides (landscape)
   var size = 1280;
 
@@ -7330,7 +7334,7 @@ function initCameraStream() {
   function handleSuccess(stream) {
     window.stream = stream;
     data.currentStream = stream;
-    // make stream available to browser console
+    // Make stream available to browser console
     video.srcObject = stream;
 
     if (constraints.video.facingMode) {
@@ -7350,64 +7354,6 @@ function initCameraStream() {
   function handleError(error) {
     console.error("getUserMedia() error: ", error);
   }
-}
-
-function takeSnapshot() {
-  debugger
-  // if you'd like to show the canvas add it to the DOM
-  var canvas = document.createElement('canvas');
-
-  var width = video.videoWidth;
-  var height = video.videoHeight;
-
-  canvas.width = width;
-  canvas.height = height;
-
-  context = canvas.getContext('2d');
-  context.drawImage(video, 0, 0, width, height);
-
-  // polyfil if needed https://github.com/blueimp/JavaScript-Canvas-to-Blob
-
-  // https://developers.google.com/web/fundamentals/primers/promises
-  // https://stackoverflow.com/questions/42458849/access-blob-value-outside-of-canvas-toblob-async-function
-  function getCanvasBlob(canvas) {
-    return new Promise(function (resolve, reject) {
-      canvas.toBlob(function (blob) {
-        resolve(blob);
-      }, 'image/jpeg');
-    });
-  }
-
-  // some API's (like Azure Custom Vision) need a blob with image data
-  getCanvasBlob(canvas).then(function (blob) {
-    // do something with the image blob
-  });
-}
-
-function createClickFeedbackUI() {
-  // in order to give feedback that we actually pressed a button.
-  // we trigger a almost black overlay
-  var overlay = document.getElementById('RecordedVideoFrame'); //.style.display;
-
-  // sound feedback
-  var sndClick = new Howl({ src: ['snd/click.mp3'] });
-
-  var overlayVisibility = false;
-  var timeOut = 80;
-
-  function setFalseAgain() {
-    overlayVisibility = false;
-    overlay.style.display = 'block';
-  }
-
-  return function () {
-    if (overlayVisibility == false) {
-      sndClick.play();
-      overlayVisibility = true;
-      overlay.style.display = 'block';
-      setTimeout(setFalseAgain, timeOut);
-    }
-  };
 }
 
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
