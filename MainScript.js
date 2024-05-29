@@ -7361,15 +7361,19 @@ document
     show("RecordedVideo");
     show("CloseBtn");
     hide("timer");
-
     hide("video");
+    setTimeout(() => {
+      e.target.pause();
+      e.target.currentTime = '0';
+      e.target.play();
+    }, 500);
+
   });
 document.getElementById("CloseBtn").addEventListener("click", (e) => {
   hide("RecordedVideo");
   hide("CloseBtn");
   show("video");
   hide("show");
-
 });
 
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
