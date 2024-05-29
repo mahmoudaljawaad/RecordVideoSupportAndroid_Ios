@@ -7028,7 +7028,7 @@ function startRecord() {
     return;
   }
   show("video");
-  hide("RecordedVideo");
+ 
   takeSnapshot() 
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
@@ -7059,9 +7059,9 @@ function startRecord() {
     fileInput.files = fileList.files;
     show("SubmitButton");
     show("preview");
-
     show("video");
-    hide("RecordedVideo");
+    show("RecordedVideoFrame");
+    show("timer");
   };
 
   data.mediaRecorder.start();
