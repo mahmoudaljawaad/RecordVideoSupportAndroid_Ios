@@ -7362,7 +7362,7 @@ document
     show("CloseBtn");
     hide("timer");
     hide("video");
-    setTimeout(() => {
+   
     var  RecordedVideo= document.getElementById('RecordedVideo')
       
 
@@ -7370,7 +7370,7 @@ document
       RecordedVideo.currentTime = '0';
       RecordedVideo.play();
 
-    }, 500);
+    
 
   });
 document.getElementById("CloseBtn").addEventListener("click", (e) => {
