@@ -7029,7 +7029,7 @@ function startRecord() {
   }
   show("video");
   hide("RecordedVideo");
-
+  takeSnapshot() 
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
 
