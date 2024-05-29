@@ -99,7 +99,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
   }
     
-  #RecordedVideoFrame {
+  #RecordedVideoImgFrame {
     position: relative;
     width: 64px;
     height: 64px;
@@ -133,7 +133,7 @@ body {
       left: calc(20% - 32px);
       top: calc(50% - 32px);
     }
-    #RecordedVideoFrame{
+    #RecordedVideoImgFrame{
       left: calc(20% - 68px);
             top: calc(50% - 32px);
     }
@@ -174,7 +174,7 @@ body {
       left: calc(50% - 32px);
       top: calc(18% - 32px);
     }
-    #RecordedVideoFrame{
+    #RecordedVideoImgFrame{
       left: calc(50% - 32px);
       top: calc(18% - 32px);
     }
