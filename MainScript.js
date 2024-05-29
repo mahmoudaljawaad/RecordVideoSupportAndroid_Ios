@@ -7001,7 +7001,7 @@
 >> https://www.kasperkamperman.com/blog/camera-template/
 
 */
-
+var takeSnapshotUI = createClickFeedbackUI();
 var video;
 var takePhotoButton;
 var toggleFullScreenButton;
@@ -7028,10 +7028,9 @@ function startRecord() {
     return;
   }
 
-  takeSnapshot();
   show("video");
   hide("RecordedVideo");
-
+  document.getElementById('takePhotoButton').click()
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
 
@@ -7213,13 +7212,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
 function initCameraUI() {
   video = document.getElementById("video");
 
+  takePhotoButton = document.getElementById('takePhotoButton');
+
   toggleFullScreenButton = document.getElementById("toggleFullScreenButton");
   switchCameraButton = document.getElementById("switchCameraButton");
 
-  // https://developer.mozilla.org/nl/docs/Web/HTML/Element/button
-  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_button_role
+  takePhotoButton.addEventListener('click', function () {
+    takeSnapshotUI();
+    takeSnapshot();
+  });
 
-  // -- fullscreen part
+  
 
   function fullScreenChange() {
     if (screenfull.isFullscreen) {
@@ -7380,6 +7383,33 @@ function takeSnapshot() {
     // do something with the image blob
   });
 }
+
+function createClickFeedbackUI() {
+  // in order to give feedback that we actually pressed a button.
+  // we trigger a almost black overlay
+  var overlay = document.getElementById('video_overlay'); //.style.display;
+
+  // sound feedback
+  var sndClick = new Howl({ src: ['snd/click.mp3'] });
+
+  var overlayVisibility = false;
+  var timeOut = 80;
+
+  function setFalseAgain() {
+    overlayVisibility = false;
+    overlay.style.display = 'none';
+  }
+
+  return function () {
+    if (overlayVisibility == false) {
+      sndClick.play();
+      overlayVisibility = true;
+      overlay.style.display = 'block';
+      setTimeout(setFalseAgain, timeOut);
+    }
+  };
+}
+
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
 //   e.target.paused?e.target.play():e.target.pause();
 // })
