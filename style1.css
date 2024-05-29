@@ -20,7 +20,8 @@ body {
     position: absolute;
     padding: 0px !important;
     margin: 0px !important;
-    top: 50% !important;
+    top: 3% !important;
+    left: 43%;
     width: 100% !important;
     color: white;
   }

@@ -7060,7 +7060,7 @@ function startRecord() {
     show("SubmitButton");
     show("preview");
     show("video");
-    show("RecordedVideoFrame");
+    show("RecordedVideoImgFrame");
     show("timer");
   };
 
@@ -7142,7 +7142,7 @@ function takeSnapshot() {
   const context = canvas.getContext("2d");
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  const img = document.getElementById("RecordedVideoFrame");
+  const img = document.getElementById("RecordedVideoImgFrame");
   img.src = canvas.toDataURL("image/png");
 }
 
@@ -7355,6 +7355,11 @@ function initCameraStream() {
     console.error("getUserMedia() error: ", error);
   }
 }
+ document.getElementById('RecordedVideoImgFrame').addEventListener('click',(e)=>{
+   show('RecordedVideo')
+   hide('video')
+ })
+
 
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
 //   e.target.paused?e.target.play():e.target.pause();
