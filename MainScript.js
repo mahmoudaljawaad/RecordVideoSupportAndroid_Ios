@@ -7028,8 +7028,8 @@ function startRecord() {
     return;
   }
   show("video");
- 
-  takeSnapshot() 
+
+  takeSnapshot();
   data.recordedChunks = [];
   data.mediaRecorder = new MediaRecorder(data.currentStream);
 
@@ -7355,11 +7355,18 @@ function initCameraStream() {
     console.error("getUserMedia() error: ", error);
   }
 }
- document.getElementById('RecordedVideoImgFrame').addEventListener('click',(e)=>{
-   show('RecordedVideo')
-   hide('video')
- })
-
+document
+  .getElementById("RecordedVideoImgFrame")
+  .addEventListener("click", (e) => {
+    show("RecordedVideo");
+    show("CloseBtn");
+    hide("video");
+  });
+document.getElementById("CloseBtn").addEventListener("click", (e) => {
+  hide("RecordedVideo");
+  hide("CloseBtn");
+  show("video");
+});
 
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
 //   e.target.paused?e.target.play():e.target.pause();
