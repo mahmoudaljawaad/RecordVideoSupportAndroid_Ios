@@ -7363,9 +7363,13 @@ document
     hide("timer");
     hide("video");
     setTimeout(() => {
-      e.target.pause();
-      e.target.currentTime = '0';
-      e.target.play();
+    var  RecordedVideo= document.getElementById('RecordedVideo')
+      
+
+      RecordedVideo.pause();
+      RecordedVideo.currentTime = '0';
+      RecordedVideo.play();
+
     }, 500);
 
   });
