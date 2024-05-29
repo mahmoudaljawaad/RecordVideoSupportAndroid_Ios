@@ -7027,6 +7027,8 @@ function startRecord() {
     console.error("No video stream available.");
     return;
   }
+
+  takeSnapshot();
   show("video");
   hide("RecordedVideo");
 
@@ -7060,8 +7062,10 @@ function startRecord() {
     show("SubmitButton");
     show("preview");
 
-    hide("video");
-    show("RecordedVideo");
+    show("video");
+    hide("RecordedVideo");
+    hide("timer");
+
   };
 
   data.mediaRecorder.start();
@@ -7344,3 +7348,38 @@ function initCameraStream() {
     console.error("getUserMedia() error: ", error);
   }
 }
+
+function takeSnapshot() {
+  debugger
+  // if you'd like to show the canvas add it to the DOM
+  var canvas = document.createElement('canvas');
+
+  var width = video.videoWidth;
+  var height = video.videoHeight;
+
+  canvas.width = width;
+  canvas.height = height;
+
+  context = canvas.getContext('2d');
+  context.drawImage(video, 0, 0, width, height);
+
+  // polyfil if needed https://github.com/blueimp/JavaScript-Canvas-to-Blob
+
+  // https://developers.google.com/web/fundamentals/primers/promises
+  // https://stackoverflow.com/questions/42458849/access-blob-value-outside-of-canvas-toblob-async-function
+  function getCanvasBlob(canvas) {
+    return new Promise(function (resolve, reject) {
+      canvas.toBlob(function (blob) {
+        resolve(blob);
+      }, 'image/jpeg');
+    });
+  }
+
+  // some API's (like Azure Custom Vision) need a blob with image data
+  getCanvasBlob(canvas).then(function (blob) {
+    // do something with the image blob
+  });
+}
+// document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
+//   e.target.paused?e.target.play():e.target.pause();
+// })

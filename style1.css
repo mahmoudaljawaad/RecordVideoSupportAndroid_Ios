@@ -16,7 +16,14 @@ body {
     object-fit: cover;
     z-index: 0;
   }
-  
+  .WatchBtn{
+    position: absolute;
+    padding: 0px !important;
+    margin: 0px !important;
+    top: 50% !important;
+    width: 100% !important;
+    color: white;
+  }
   #gui_controls {
     position: fixed;
     background-color: #111; /*rgba(255, 0, 0, 0.5);*/
@@ -90,6 +97,15 @@ body {
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.5);
   }
+    
+  #RecordedVideoFrame {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    background-image: url('img/ic_camera_rear_white_36px.svg');
+    border-radius: 10%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
   
   #switchCameraButton[aria-pressed='true'] {
     background-image: url('img/ic_camera_front_white_36px.svg');
@@ -116,13 +132,17 @@ body {
       left: calc(20% - 32px);
       top: calc(50% - 32px);
     }
+    #RecordedVideoFrame{
+      left: calc(20% - 68px);
+            top: calc(50% - 32px);
+    }
   
     #toggleFullScreenButton {
       left: calc(80% - 32px);
       top: calc(50% - 32px);
     }
     #SubmitButton {
-      left: calc(80% - 32px);
+      left: calc(80% - 0px);
       top: calc(50% - 32px);
     }
   }
@@ -150,6 +170,10 @@ body {
     }
   
     #switchCameraButton {
+      left: calc(50% - 32px);
+      top: calc(18% - 32px);
+    }
+    #RecordedVideoFrame{
       left: calc(50% - 32px);
       top: calc(18% - 32px);
     }

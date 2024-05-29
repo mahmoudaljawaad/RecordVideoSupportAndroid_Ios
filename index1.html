@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1" />
@@ -17,10 +18,14 @@
 <body>
     <div id="container">
         <div id="vid_container">
-            <video id="video" autoplay playsinline></video>
+            <video id="video"  autoplay playsinline></video>
             <video id="RecordedVideo" class="hidden" autoplay playsinline></video>
+            <div class="row WatchBtn"  >
+                <span style="display: flex;justify-content: center;">
+                    Watch
+                </span>
+            </div>
 
-            <div id="video_overlay"></div>
             <div class="row">
                 <span class="text-danger" id="timer"
                     style="position: relative;top: -28px;display: flex;justify-content: center;font-weight: 700;">
@@ -29,11 +34,11 @@
         </div>
         <div id="gui_controls">
             <!-- Rotate Camera -->
-            <button id="switchCameraButton" name="switch Camera" type="button" aria-pressed="false">
+
+            <button id="switchCameraButton" class="hidden" name="switch Camera" type="button" aria-pressed="false">
                 <i class="bi bi-arrow-repeat" style="font-size: 40px;color: white;"></i>
-
             </button>
-
+            <img src="unknown.jpg" id="RecordedVideoFrame" />
             <button type="button" class="btn btn-primary" id="startbutton" onclick="startRecord()">
                 <i class="bi bi-play-fill" style="font-size: 40px;color: #1fb41f;"></i>
             </button>
@@ -43,16 +48,17 @@
             </button>
             <form>
                 <div class="row hidden" style="margin-top:10px ">
-                    <input name="QutoID" value="10"  />
-                    <input type="file" id="fileRecord" name="RecordVideo"/>
+                    <input name="QutoID" value="10" />
+                    <input type="file" id="fileRecord" name="RecordVideo" />
                 </div>
                 <!-- Submit Gose Here -->
                 <button type="submit" class="btn btn-success hidden" id="SubmitButton">
                     <i class="bi bi-send-arrow-down-fill" style="font-size: 40px;color: #ffffff;"></i>
                 </button>
             </form>
-             <button class="hidden" id="toggleFullScreenButton" name="toggle FullScreen" type="button"
-            aria-pressed="false"></button> 
+
+            <button class="hidden" id="toggleFullScreenButton" name="toggle FullScreen" type="button"
+                aria-pressed="false"></button>
         </div>
     </div>
 
