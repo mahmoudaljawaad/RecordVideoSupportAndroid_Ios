@@ -1,215 +1,46 @@
-/* body {
-    margin: 0px;
-    padding: 0px;
-    background: #000;
-  }
-  
-  #vid_container {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-  
-  #video,#RecordedVideo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-  }
-  .WatchBtn{
-    position: absolute;
-    padding: 0px !important;
-    margin: 0px !important;
-    top: 3% !important;
-    left: 43%;
-    width: 100% !important;
-    color: white;
-  }
-  
-  
-  #video_overlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  
-    z-index: 10;
-    background-color: #111;
-  }
-  
- 
-  
-  button {
-    outline: none;
-    position: absolute;
-    color: white;
-    display: block;
-    opacity: 1;
-    background: transparent;
-    border: solid 2px #fff;
-    padding: 0;
-    text-shadow: 0px 0px 4px black;
-    background-position: center center;
-    background-repeat: no-repeat;
-    pointer-events: auto;
-    z-index: 2;
-  }
-  .hidden{
-    display: none !important;
-  }
-  #takePhotoButton,#StopButton,#startbutton {
-    left: calc(50% - 40px);
-    top: calc(50% - 40px);
-    width: 80px;
-    height: 80px;
-    background-image: url('img/ic_photo_camera_white_48px.svg');
-    border-radius: 50%;
-    background-color: rgb(255 255 255);
-    }
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+}
 
-  
-  #toggleFullScreenButton,#SubmitButton {
-    border: 0px !important;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background-color: transparent;
-  }
-  
-  #toggleFullScreenButton[aria-pressed='true'] {
-    background-image: url('img/ic_fullscreen_exit_white_48px.svg');
-  }
-  
-  #switchCameraButton {
-    display: none;
-    width: 64px;
-    height: 64px;
-    background-image: url('img/ic_camera_rear_white_36px.svg');
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-    
-  #RecordedVideoImgFrame {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    background-image: url('img/ic_camera_rear_white_36px.svg');
-    border-radius: 10%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  #switchCameraButton[aria-pressed='true'] {
-    background-image: url('img/ic_camera_front_white_36px.svg');
-  }
-  
-  @media screen and (orientation: portrait) {
-  
-   
-    #vid_container {
-      width: 100%;
-      height: 80%;
-    }
-  
-   
-  
-    #switchCameraButton {
-      left: calc(20% - 32px);
-      top: calc(50% - 32px);
-    }
-    #RecordedVideoImgFrame{
-      left: calc(20% - 68px);
-            top: calc(50% - 32px);
-    }
-  
-    #toggleFullScreenButton {
-      left: calc(80% - 32px);
-      top: calc(50% - 32px);
-    }
-    #SubmitButton {
-      left: calc(80% - 0px);
-      top: calc(50% - 32px);
-    }
-  }
-  
-  @media screen and (orientation: landscape) {
-    #vid_container {
-      width: 80%;
-      height: 100%;
-    }
-  
-    #vid_container.left {
-      left: 20%;
-    }
-  
-  
-  
-    
-  
-    #switchCameraButton {
-      left: calc(50% - 32px);
-      top: calc(18% - 32px);
-    }
-    #RecordedVideoImgFrame{
-      left: calc(50% - 32px);
-      top: calc(18% - 32px);
-    }
-  
-    #toggleFullScreenButton {
-      left: calc(50% - 32px);
-      top: calc(82% - 32px);
-    }
-    #SubmitButton {
-      left: calc(50% - 32px);
-      top: calc(82% - 32px);
-    }
-  } */
- body {
-    margin: 0px;
-    padding: 0px;
-    background: #000;
-    overflow: hidden !important;
-  }
 video {
-  z-index: 9999 !important;
-  width: 100% !important;
-  height: 100% !important;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  min-width: 100%;
-  min-height: 100%;
-  /* min-width: 100%; 
-    min-height: 100%; 
-    width: auto;
-    height: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);  */
 }
+
 .RowVideoFrame {
-  height: 100% !important;
-  min-height: 80vh;
-  background-color: rgb(255, 255, 255);
-  padding: 0px !important;
-  margin: 0px !important;
+  height: 100vh;
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
+
 .CamBtn {
   min-height: 20vh;
   background-color: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 button.BtnRadius {
   width: 70px;
   height: 70px;
-  background-color: white !important;
-  border-radius: 50% !important;
-  border-color: white !important;
-  border: 3px solid white !important;
+  background-color: white;
+  border-radius: 50%;
+  border: 3px solid white;
 }
+
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 .RecordedVideoImgFrame {
@@ -218,59 +49,62 @@ button.BtnRadius {
   border: 1px solid white;
   border-radius: 20px;
 }
+
 .BtnSubmit {
   width: 70px;
   height: 70px;
-  padding: 15px !important;
-  color: white !important;
-  font-weight: 600 !important;
+  padding: 15px;
+  color: white;
+  font-weight: 600;
 }
-.container-fluid {
-  overflow: hidden !important;
 
-  height: 100% !important;
-  width: 100% !important;
+.container-fluid {
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
   background-color: #111;
+  display: flex;
+  flex-direction: column;
 }
+
 .timer {
-  z-index: 99999 !important;
-  position: relative;
-  top: -28px;
+  z-index: 99999;
+  position: absolute;
+  top: 10px;
+  width: 100%;
   display: flex;
   justify-content: center;
   font-weight: 700;
+  color: white;
 }
+
+.row {
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+}
+
 .row > * {
   flex-shrink: 0;
   width: 100%;
   max-width: 100%;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-  margin-top: var(--bs-gutter-y);
 }
+
 @media screen and (orientation: landscape) {
   .RowVideoFrame {
-    height: 100% !important;
-    min-height: 100vh;
-    min-width: 80vh;
-    background-color: rgb(255, 255, 255);
+      height: 100vh;
   }
   .ColVideoLand {
-    width: 80% !important;
+      width: 80%;
   }
   .colbtnLand {
-    width: 19% !important;
+      width: 20%;
   }
   .CamBtn {
-    height: 100vh !important;
-  }
-  .col-4 {
-    width: 100% !important;
-  }
-  .row > * {
-    padding-left: 0px !important;
+      height: 100vh;
   }
 }
+
 .loader {
   border: 5px solid #ffffff4f;
   border-radius: 50%;
@@ -281,21 +115,20 @@ button.BtnRadius {
   animation: spin 1s linear infinite;
 }
 
-/* Safari */
 @-webkit-keyframes spin {
   0% {
-    -webkit-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
   }
 }
 
 @keyframes spin {
   0% {
-    transform: rotate(0deg);
+      transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+      transform: rotate(360deg);
   }
 }
