@@ -167,7 +167,12 @@
       top: calc(82% - 32px);
     }
   } */
-
+ body {
+    margin: 0px;
+    padding: 0px;
+    background: #000;
+    overflow: hidden !important;
+  }
 video {
   z-index: 9999 !important;
   width: 100% !important;
