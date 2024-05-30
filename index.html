@@ -1,71 +1,97 @@
+@model BAL.Portal.Motor.MotorMAP.QuotationStatusInfo
+@{
+    Layout = null;
+}
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <title>Camera</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Smart Device Camera Template for HTML, CSS, JS and WebRTC" />
+    <meta name="keywords" content="HTML,CSS,JavaScript, WebRTC, Camera" />
+    <meta name="author" content="" />
+    <link rel="shortcut icon" href="~/favicon.png" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <link href="styles.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="~/assets/css/uploadrecordv1.css" rel="stylesheet" asp-append-version="true" />
+
 </head>
-<body class="d-flex flex-column">
-<div class="container">
-        <div class="mt-10 ">
-            <h1>Web API Camera</h1>
-        </div>
-        <div class="row " class="justify-content-center" style="margin-top:10px;margin-bottom:20px">
-            <div>
-                <form id="device-form" class="hidden">
-                    <label for="device-option">Chose Camera:</label>
-                    <select class="form-select" name="device-option" id="device-option" onchange="deviceOptionChange()"
-                        form="device-option-form">
-                    </select>
-                </form>
-            </div>
-        </div>
-        <div id="video-canvas" class=" d-flex justify-content-between flex-row flex-wrap mb5"
-            style="width:100% !important">
-            <div id="video-container" class="hidden mb-5" style="width:100% !important">
-                <h3 class="text-center">Video Camera</h3>
-                <video id="video" playsinline autoplay class="rounded-3"></video>
-            </div>
-            <div id="canvas-container" class="hidden mb-5">
-                <h3 class="text-center">Snapshot</h3>
-                <canvas id="canvas"></canvas>
-            </div>
-        </div>
-        <div class="row" style="margin-bottom:10px">
-            <span class="text-danger" id="timer" >
-            </span>
-        </div>
-        <form action="/index1.html" method="post" enctype="multipart/form-data">
-        <div class=" text-center" style="margin-bottom:30px">
-            <button type="button" class="btn btn-primary" id="startbutton" onclick="startRecord()">Start Record</button>
-            <button  type="button" class="hidden btn btn-danger" id="StopButton" onclick="stopRecord()">Stop Record</button>
-            <button type="submit" class="btn btn-success hidden" id="SubmitButton">Submit</button>
-        </div>
-        <div class="row" style="margin-bottom:40px;">
-            <div id="preview" class="hidden">
-                <h3 class="text-center">Preview</h3>
-                <video id="preview-video" controls class="rounded-3"></video>
-            </div>
-        </div>
-        <div class="row hidden" style="margin-top:10px ">
-            <input name="QutoID" value="10"  />
-            <input type="file" id="fileRecord" name="RecordVideo"/>
-        </div>
-    </form>
-    </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
-        <script src="script.js"></script>
-</body>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 ColVideoLand">
+                <div class="row RowVideoFrame">
+                    <video id="video" autoplay playsinline></video>
+                    <video id="RecordedVideo" class="hidden"></video>
 
+                    <div class="row WatchBtn hidden" id="CloseBtn">
+                        <span style="display: flex;justify-content: center;">
+                            <i class="bi bi-x-circle-fill" style="font-size: 40px;color: white;"></i>
+                        </span>
+                    </div>
+
+                    <div class="row">
+                        <span class="text-danger timer" id="timer">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 colbtnLand">
+                <div class="row CamBtn">
+                    <div class="col-4 text-center align-self-center">
+                        <button id="switchCameraButton" class="hidden" name="switch Camera" type="button"
+                                aria-pressed="false">
+                            <i class="bi bi-arrow-repeat" style="font-size: 40px;color: white;"></i>
+                        </button>
+                        <img src="" id="RecordedVideoImgFrame" class="RecordedVideoImgFrame hidden" />
+                    </div>
+                    <div class="col-4 text-center align-self-center">
+                        <button type="button" class="btn  BtnRadius" id="startbutton" onclick="startRecord()">
+                            <i class="bi bi-play-fill" style="font-size: 40px;color: #1fb41f;"></i>
+                        </button>
+
+                        <button type="button" class="btn  BtnRadius hidden" id="StopButton" onclick="stopRecord()">
+                            <i class="bi bi-stop-fill" style="font-size: 40px;color: red;"></i>
+                        </button>
+                    </div>
+                    <div class="col-4 text-center align-self-center">
+                        <form asp-action="Create" method="post" enctype="multipart/form-data" id="objCreateVideo">
+                            <div class="row hidden" style="margin-top:10px ">
+                                <input asp-for="QoutationID" />
+                                <input type="file" id="fileRecord" asp-for="FileContent" />
+                            </div>
+                            <button type="submit" class="btn BtnSubmit hidden" id="SubmitButton">
+                                <i class="bi bi-send-arrow-down-fill" style="font-size: 40px;color: #ffffff;"></i>
+                                <br>
+                                Submit
+                            </button>
+                        </form>
+                        <button class="hidden" id="toggleFullScreenButton" name="toggle FullScreen" type="button"
+                                aria-pressed="false">
+                        </button>
+                        <div style="" class="hidden" id="Loaderrs">
+                            <div class="loader" style="margin: 0 auto !important; "></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/assets/plugins/global/plugins.bundle.js" asp-append-version="true"></script>
+    <script src="~/assets/js/scripts.bundle.js" asp-append-version="true"></script>
+    <script src="~/assets/js/UploadRecordv1.js"></script>
+    <script>
+        $("#SubmitButton").click((e) => {
+            hide("SubmitButton");
+            document.getElementById("Loaderrs").classList.remove("hidden")
+            $("button").attr("disabled", "disabled")
+            $("form").submit();
+        })
+    </script>
+</body>
 </html>

@@ -7379,7 +7379,9 @@ document.getElementById("CloseBtn").addEventListener("click", (e) => {
   show("video");
   hide("show");
 });
-
+document.querySelector('video').addEventListener('click',(e)=>{
+  e.target.paused?e.target.play():e.target.pause()
+})
 // document.getElementById('RecordedVideo').addEventListener('click',(e)=>{
 //   e.target.paused?e.target.play():e.target.pause();
 // })
